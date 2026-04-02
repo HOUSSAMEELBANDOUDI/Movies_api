@@ -1,230 +1,44 @@
-# 🎬 Movies API
+# Movies API
 
-A complete **RESTful API** built with **Node.js**, **Express**, and **SQLite** for managing movies.
-This API includes authentication, comments, and watchlist functionality.
+A RESTful API for managing movies and reviews, with user authentication and role-based access control. Built with **Express.js 5**, **Sequelize ORM**, and **SQLite**.
 
----
+## Tech Stack
 
-## 🚀 Features
+- **Node.js** + **Express.js 5**
+- **Sequelize ORM** — database management
+- **SQLite** — lightweight database
+- **JWT** — authentication
+- **bcrypt** — password hashing
+- **express-validator** — input validation
+- **morgan** — HTTP request logger
 
-* 🔑 User authentication (Register / Login with JWT)
-* 🎥 CRUD operations for movies
-* 💬 Add and view comments for each movie
-* 👀 Manage a personal watchlist
-* 🧰 Middleware for validation, authentication, and error handling
-* 🗄️ SQLite database (lightweight and fast)
-* 🧪 Input validation using `express-validator`
+## Features
 
----
+- User registration & login with JWT authentication
+- CRUD operations for movies
+- Review system for movies
+- Admin middleware for protected operations
+- Input validation on all routes
+- Role-based access control
 
-## 🛠️ Tech Stack
+## API Endpoints
 
-* **Node.js**
-* **Express.js**
-* **SQLite** (`sqlite3` or `sequelize`)
-* **JWT (jsonwebtoken)** — user authentication
-* **bcryptjs** — password hashing
-* **express-validator** — request validation
-* **dotenv** — environment variables
-* **morgan** — logging middleware
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| POST | `/auth/register` | Register user | No |
+| POST | `/auth/login` | Login | No |
+| GET | `/movies` | Get all movies | No |
+| POST | `/movies` | Create movie | Admin |
+| GET | `/reviews` | Get reviews | No |
+| POST | `/reviews` | Add review | Yes |
 
----
+## How to Run
 
-## 📦 Installation
-
-1. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/HOUSSAMEELBANDOUDI/Movies_api.git
-   cd Movies_api
-   ```
-
-2. **Install dependencies**
-
-   ```bash
-   npm install
-   ```
-
-3. **Create a `.env` file**
-
-   ```env
-   PORT=3000
-   JWT_SECRET=your_secret_key
-   DATABASE_URL=./db/movies.sqlite
-   ```
-
-4. **Run database migrations** (if using Sequelize)
-
-   ```bash
-   npx sequelize-cli db:migrate
-   ```
-
-5. **Start the server**
-
-   ```bash
-   npm start
-   ```
-
-Server will start at **[http://localhost:3000](http://localhost:3000)**
-
----
-
-## 🔐 Authentication Endpoints
-
-| Method | Endpoint             | Description         |
-| ------ | -------------------- | ------------------- |
-| POST   | `/api/auth/register` | Register new user   |
-| POST   | `/api/auth/login`    | Login and get token |
-
-### Example Request – Register
-
-```json
-{
-  "name": "Houssame",
-  "email": "houssame@example.com",
-  "password": "123456"
-}
+```bash
+npm install
+npm start
 ```
 
-### Example Response
+## Author
 
-```json
-{
-  "message": "User registered successfully"
-}
-```
-
-### Example Request – Login
-
-```json
-{
-  "email": "houssame@example.com",
-  "password": "123456"
-}
-```
-
-### Example Response
-
-```json
-{
-  "token": "your_jwt_token"
-}
-```
-
-Use this token for protected routes (movies, comments, watchlist):
-
-```
-Authorization: Bearer your_jwt_token
-```
-
----
-
-## 🎥 Movie Endpoints
-
-| Method | Endpoint          | Description          | Auth |
-| ------ | ----------------- | -------------------- | ---- |
-| GET    | `/api/movies`     | Get all movies       | ❌    |
-| GET    | `/api/movies/:id` | Get a single movie   | ❌    |
-| POST   | `/api/movies`     | Add a new movie      | ✅    |
-| PUT    | `/api/movies/:id` | Update movie details | ✅    |
-| DELETE | `/api/movies/:id` | Delete a movie       | ✅    |
-
-### Example Request – Add a Movie
-
-```json
-{
-  "name": "Inception",
-  "genre": "Sci-Fi",
-  "releaseDate": "2010-07-16"
-}
-```
-
----
-
-## 💬 Comments Endpoints
-
-| Method | Endpoint                   | Description                  | Auth |
-| ------ | -------------------------- | ---------------------------- | ---- |
-| GET    | `/api/movies/:id/comments` | Get all comments for a movie | ❌    |
-| POST   | `/api/movies/:id/comments` | Add a comment to a movie     | ✅    |
-
-### Example Request – Add Comment
-
-```json
-{
-  "text": "Amazing movie! Highly recommended."
-}
-```
-
----
-
-## 👀 Watchlist Endpoints
-
-| Method | Endpoint                  | Description                 | Auth |
-| ------ | ------------------------- | --------------------------- | ---- |
-| GET    | `/api/watchlist`          | Get user's watchlist        | ✅    |
-| POST   | `/api/watchlist/:movieId` | Add movie to watchlist      | ✅    |
-| DELETE | `/api/watchlist/:movieId` | Remove movie from watchlist | ✅    |
-
----
-
-## 🧰 Middleware
-
-* **authMiddleware** — Verifies JWT tokens for protected routes
-* **errorHandler** — Handles errors gracefully and returns JSON responses
-* **validateRequest** — Uses `express-validator` to ensure valid input
-
----
-
-## 📁 Project Structure
-
-```
-Movies_api/
-│
-├── controllers/
-│   ├── authController.js
-│   ├── movieController.js
-│   ├── commentController.js
-│   └── watchlistController.js
-│
-├── middlewares/
-│   ├── authMiddleware.js
-│   ├── errorHandler.js
-│   └── validateRequest.js
-│
-├── models/
-│   ├── user.js
-│   ├── movie.js
-│   ├── comment.js
-│   └── watchlist.js
-│
-├── routes/
-│   ├── authRoutes.js
-│   ├── movieRoutes.js
-│   ├── commentRoutes.js
-│   └── watchlistRoutes.js
-│
-├── db/
-│   └── database.sqlite
-│
-├── .env
-├── app.js
-├── server.js
-├── package.json
-└── README.md
-```
-
----
-
-## 🧑‍💻 Author
-
-**HOUSSAME ELBANDOUDI**
-📧 [elbandoudi99@gmail.com](mailto:elbandoudi99@gmail.com)
-🔗 [GitHub Profile](https://github.com/HOUSSAMEELBANDOUDI)
-
----
-
-## 🪪 License
-
-This project is open-source and available under the [MIT License](LICENSE).
-
+**Houssame El Bandoudi** — [GitHub](https://github.com/HOUSSAMEELBANDOUDI)
